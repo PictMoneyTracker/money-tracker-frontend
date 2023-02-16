@@ -11,7 +11,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   // test command
-  FirebaseCRUDApiService.createDoc();
+  // FirebaseCRUDApiService.createDoc();
   runApp(const MyApp());
 }
 

@@ -1,8 +1,10 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_tracker/core/functions/general_functions.dart';
 import 'package:money_tracker/features/dashboard/ui/mt_dashboard.dart';
 
+import '../../../design/widgets/mt_loader.dart';
 import '../bloc/auth_bloc.dart';
 
 class AuthPage extends StatelessWidget {
@@ -11,49 +13,73 @@ class AuthPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: BlocConsumer<AuthBloc, AuthState>(
-          listener: (context, state) {
-            if (state is AuthSuccessState) {
-              navigate(context, const MtDashboard());
-            }
-            if (state is AuthFailureState) {
-              scaffoldMessage(context, "Error: ${state.message}");
-            }
-          },
-          builder: (context, state) {
-            if (state is AuthInitialState) {
-              // TODO: Add UI here 
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      BlocProvider.of<AuthBloc>(context)
-                          .add(AuthRequestEvent());
-                    },
-                    child: const Text('Login'),
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthSuccessState) {
+            navigate(context, const MtDashboard());
+          }
+          if (state is AuthFailureState) {
+            scaffoldMessage(context, "Error: ${state.message}");
+          }
+        },
+        builder: (context, state) {
+          if (state is AuthInitialState) {
+            // TODO: Add UI here
+            return ListView(
+              padding: const EdgeInsets.all(15),
+              children: <Widget>[
+                Image.network(
+                  'https://www.pngarts.com/files/17/Finance-PNG-Free-Download.png',
+                  height: 400,
+                  width: 300,
+                ),
+                AnimatedTextKit(
+                  animatedTexts: [
+                    TypewriterAnimatedText(
+                      'Money Tracker',
+                      textAlign: TextAlign.center,
+                      speed: const Duration(milliseconds: 150),
+                      textStyle: const TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                  isRepeatingAnimation: true,
+                  repeatForever: true,
+                  displayFullTextOnTap: true,
+                  stopPauseOnTap: false,
+                ),
+                const SizedBox(height: 150),
+                FloatingActionButton.extended(
+                  onPressed: () {
+                    BlocProvider.of<AuthBloc>(context).add(AuthRequestEvent());
+                  },
+                  icon: Image.network(
+                    'https://developers.google.com/identity/images/g-logo.png',
+                    height: 32,
+                    width: 32,
                   ),
-                  const SizedBox(),
-                  ElevatedButton(
-                    onPressed: () {
-                      BlocProvider.of<AuthBloc>(context).add(AuthLogoutEvent());
-                    },
-                    child: const Text("Logout"),
-                  ),
-                ],
-              );
-            }
-            if (state is AuthFailureState) {
-              return Text(state.message); // TODO: Beautify this
-            }
-            if (state is AuthLoadingState) {
-              return const CircularProgressIndicator(); // TODO: extract to widget
-            } else {
-              return const Text('Unknown state');
-            }
-          },
-        ),
+                  label: const Text('Sign in with Google'),
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                ),
+              ],
+            );
+          }
+          if (state is AuthFailureState) {
+            return Center(
+              child: Text(state.message),
+            ); // TODO: Beautify this
+          }
+          if (state is AuthLoadingState) {
+            return const Center(
+              child: MtLoader(),
+            ); // TODO: extract to widget
+          } else {
+            return const Text('Unknown state');
+          }
+        },
       ),
     );
   }

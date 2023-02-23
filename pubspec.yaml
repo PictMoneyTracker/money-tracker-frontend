@@ -44,6 +44,7 @@ dependencies:
   crypto: ^3.0.2
   sign_in_with_apple: ^4.3.0
   flutter_bloc: ^8.1.2
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:

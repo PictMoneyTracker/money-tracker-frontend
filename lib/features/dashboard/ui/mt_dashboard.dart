@@ -1,39 +1,10 @@
-
 import 'package:flutter/material.dart';
-
+import '../../../design/widgets/mt_bottom_navbar.dart';
+import 'widgets/balance_card.dart';
 import 'widgets/transaction_card.dart';
 
-class MtDashboard extends StatefulWidget {
+class MtDashboard extends StatelessWidget {
   const MtDashboard({super.key});
-
-  @override
-  State<MtDashboard> createState() => _MyStatefulWidgetState();
-}
-
-class _MyStatefulWidgetState extends State<MtDashboard> {
-  int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Stipend',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Allowance',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: Stock',
-      style: optionStyle,
-    ),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,43 +13,72 @@ class _MyStatefulWidgetState extends State<MtDashboard> {
         title: const Text('Money Tracker'),
         leading: IconButton(
           onPressed: () {},
-          icon: Icon(Icons.menu),
+          icon: const Icon(Icons.menu),
           tooltip: 'Show Menu',
         ),
         actions: <Widget>[
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
             tooltip: 'Show Settings',
           ),
         ],
       ),
       body: Column(
-        children: const [
-          SizedBox(height: 30),
-          TransactionCard(),
-          SizedBox(height: 30),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const BalanceCard(),
+          const SizedBox(
+            height: 25,
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: const Text(
+              'Lorem Ipsum',
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Expanded(
+            child: ListViewBuilder(),
+          ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.money),
-            label: 'Stipend',
+      bottomNavigationBar: const MtBottomNavbar(),
+    );
+  }
+}
+
+class ListViewBuilder extends StatelessWidget {
+  const ListViewBuilder({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: 10,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+          margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 5,
+                // offset: Offset(0, 3),
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.money),
-            label: 'Allowance',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.money),
-            label: 'Stock',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
-      ),
+          child: const TransactionCard(),
+        );
+      },
     );
   }
 }

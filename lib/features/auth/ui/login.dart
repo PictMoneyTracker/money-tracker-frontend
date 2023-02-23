@@ -24,7 +24,6 @@ class AuthPage extends StatelessWidget {
         },
         builder: (context, state) {
           if (state is AuthInitialState) {
-            // TODO: Add UI here
             return ListView(
               padding: const EdgeInsets.all(15),
               children: <Widget>[

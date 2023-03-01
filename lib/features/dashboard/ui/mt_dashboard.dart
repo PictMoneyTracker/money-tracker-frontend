@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../design/widgets/mt_bottom_navbar.dart';
 import '../../auth/bloc/auth_bloc.dart';
 import '../../auth/ui/login.dart';
+import '../bloc/dashboard_bloc.dart';
+import 'pages/allowance_page.dart';
+import 'pages/stipend_page.dart';
+import 'pages/stocks_page.dart';
 import 'widgets/balance_card.dart';
 import 'widgets/transaction_card.dart';
 
 class MtDashboard extends StatelessWidget {
   const MtDashboard({super.key});
+
+  final List<Widget> _pages = const [
+    StocksPage(),
+    StipendPage(),
+    AllowancePage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -21,57 +32,40 @@ class MtDashboard extends StatelessWidget {
           );
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Money Tracker'),
-          leading: IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.menu),
-            tooltip: 'Show Menu',
-          ),
-          actions: <Widget>[
-            IconButton(
-              onPressed: () {
-                BlocProvider.of<AuthBloc>(context).add(AuthLogoutEvent());
-              },
-              icon: const Icon(Icons.settings),
-              tooltip: 'Show Settings',
-            ),
-          ],
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const BalanceCard(),
-            const SizedBox(
-              height: 25,
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: const Text(
-                'Lorem Ipsum',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 20,
-                ),
+      child: BlocBuilder<DashboardBloc, DashboardState>(
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Money Tracker'),
+              leading: IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.menu),
+                tooltip: 'Show Menu',
               ),
+              actions: <Widget>[
+                IconButton(
+                  onPressed: () {
+                    BlocProvider.of<AuthBloc>(context).add(AuthLogoutEvent());
+                  },
+                  icon: const Icon(Icons.settings),
+                  tooltip: 'Show Settings',
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 10,
+            body: IndexedStack(
+              index: context.select((DashboardBloc bloc) => bloc.currentIndex),
+              children: _pages,
             ),
-            const Expanded(
-              child: ListViewBuilder(),
-            ),
-          ],
-        ),
-        bottomNavigationBar: const MtBottomNavbar(),
+            bottomNavigationBar: const MtBottomNavbar(),
+          );
+        },
       ),
     );
   }
 }
 
-class ListViewBuilder extends StatelessWidget {
-  const ListViewBuilder({Key? key}) : super(key: key);
+class TransactionHistory extends StatelessWidget {
+  const TransactionHistory({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

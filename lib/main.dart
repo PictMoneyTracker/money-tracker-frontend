@@ -7,6 +7,7 @@ import 'features/auth/ui/login.dart';
 import 'core/logger/logger_modules/devtools_logger_module.dart';
 import 'core/logger/my_logger.dart';
 import 'features/auth/bloc/auth_bloc.dart';
+import 'features/dashboard/bloc/dashboard_bloc.dart';
 import 'features/dashboard/ui/mt_dashboard.dart';
 
 import 'firebase_options.dart';
@@ -30,8 +31,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
-    return BlocProvider(
-      create: (context) => AuthBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AuthBloc(),
+        ),
+        BlocProvider(
+          create: (context) => DashboardBloc(),
+        ),
+      ],
       child: MaterialApp(
         title: _title,
         home: user != null ? const MtDashboard() : const AuthPage(),

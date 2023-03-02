@@ -6,7 +6,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../api_layer/api_response.dart';
-import 'models/model_name.dart';
+import 'utils/model_name.dart';
 
 class FirebaseCRUDApiService {
   // create apis

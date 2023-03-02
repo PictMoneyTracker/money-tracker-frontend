@@ -7,6 +7,7 @@ import 'package:money_tracker/core/api_service/firebase_crud_service/transaction
 
 import '../../../core/api_service/firebase_crud_service/utils/categories.dart';
 import '../../../core/api_service/firebase_crud_service/transaction_service/transaction_service.dart';
+
 import '../../../design/widgets/mt_bottom_navbar.dart';
 import '../../auth/bloc/auth_bloc.dart';
 import '../../auth/ui/login.dart';
@@ -81,6 +82,7 @@ class MtDashboard extends StatelessWidget {
               tooltip: 'Add Transaction',
               child: const Icon(Icons.add),
             ),
+
           );
         },
       ),

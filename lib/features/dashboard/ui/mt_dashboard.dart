@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:money_tracker/core/api_service/firebase_crud_service/transaction_service/models/transaction_model.dart';
-
+import '../../../core/api_service/firebase_crud_service/transaction_service/models/transaction_model.dart';
+import '../../../design/widgets/mt_drawer.dart';
 import '../../../core/api_service/firebase_crud_service/utils/categories.dart';
 import '../../../core/api_service/firebase_crud_service/transaction_service/transaction_service.dart';
 
@@ -41,13 +41,9 @@ class MtDashboard extends StatelessWidget {
       child: BlocBuilder<DashboardBloc, DashboardState>(
         builder: (context, state) {
           return Scaffold(
+            drawer: const MtDrawer(),
             appBar: AppBar(
               title: const Text('Money Tracker'),
-              leading: IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.menu),
-                tooltip: 'Show Menu',
-              ),
               actions: <Widget>[
                 IconButton(
                   onPressed: () {
@@ -82,7 +78,6 @@ class MtDashboard extends StatelessWidget {
               tooltip: 'Add Transaction',
               child: const Icon(Icons.add),
             ),
-
           );
         },
       ),

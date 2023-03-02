@@ -5,18 +5,24 @@
 // server - firebase
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../api_layer/api_response.dart';
-import 'utils/model_name.dart';
+import '../../../api_layer/api_response.dart';
+import 'models/user_model.dart';
 
-class FirebaseCRUDApiService {
+
+
+class UserApiService {
   // create apis
-  static Future<ApiResponse<bool>> createDoc() async {
+  static Future<ApiResponse<bool>> createDoc(UserModel user) async {
     try {
       await FirebaseFirestore.instance
           .collection('users')
-          .doc('doc_name')
+          .doc(user.id)
           .set({
         // model.toMap()
+        'id': user.id,
+        'name': user.name,
+        'email': user.email,
+        'photoUrl': user.photoUrl,
       });
       return const ApiResponse(data: true);
     } catch (e) {
@@ -26,8 +32,9 @@ class FirebaseCRUDApiService {
 
   static Future<ApiResponse<bool>> addDoc() async {
     try {
-      await FirebaseFirestore.instance.collection('collection_name').add({
+      await FirebaseFirestore.instance.collection('users').add({
         // model.toMap()
+
       });
       return const ApiResponse(data: true);
     } catch (e) {
@@ -36,29 +43,29 @@ class FirebaseCRUDApiService {
   }
 
   // read apis
-  static Future<ApiResponse<ModelName>> readDoc() async {
+  static Future<ApiResponse<UserModel>> readDoc(String uid) async {
     try {
       DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-          .collection('collection_name')
-          .doc('doc_name')
+          .collection('users')
+          .doc(uid)
           .get();
 
-      ModelName modelName =
-          ModelName.fromMap(documentSnapshot.data() as Map<String, dynamic>);
-      return ApiResponse(data: modelName);
+      UserModel user =
+          UserModel.fromMap(documentSnapshot.data() as Map<String, dynamic>);
+      return ApiResponse(data: user);
     } catch (e) {
       return ApiResponse(error: e.toString());
     }
   }
 
-  static Future<ApiResponse<List<ModelName>>> readCollection() async {
+  static Future<ApiResponse<List<UserModel>>> readCollection() async {
     try {
-      List<ModelName> models = [];
+      List<UserModel> models = [];
       QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection('collection_name').get();
+          await FirebaseFirestore.instance.collection('users').get();
 
       for (var i = 0; i < querySnapshot.docs.length; i++) {
-        models.add(ModelName.fromMap(
+        models.add(UserModel.fromMap(
             querySnapshot.docs[i].data() as Map<String, dynamic>));
       }
       return ApiResponse(data: models);
@@ -68,11 +75,11 @@ class FirebaseCRUDApiService {
   }
 
   // update apis
-  static Future<ApiResponse<bool>> updateDoc(ModelName updatedModel) async {
+  static Future<ApiResponse<bool>> updateDoc(UserModel updatedModel) async {
     try {
       await FirebaseFirestore.instance
-          .collection('collection_name')
-          .doc('doc_name')
+          .collection('users')
+          .doc(updatedModel.id)
           .update(updatedModel.toMap());
 
       return const ApiResponse(data: true);
@@ -82,11 +89,11 @@ class FirebaseCRUDApiService {
   }
 
   // delete apis
-  static Future<ApiResponse<bool>> deleteDoc() async {
+  static Future<ApiResponse<bool>> deleteDoc(String uid) async {
     try {
       await FirebaseFirestore.instance
-          .collection('collection_name')
-          .doc('doc_name')
+          .collection('users')
+          .doc(uid)
           .delete();
 
       return const ApiResponse(data: true);

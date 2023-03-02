@@ -1,5 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uuid/uuid.dart';
+
+import 'package:money_tracker/core/api_service/firebase_crud_service/transaction_service/models/transaction_model.dart';
+
+import '../../../core/api_service/firebase_crud_service/utils/categories.dart';
+import '../../../core/api_service/firebase_crud_service/transaction_service/transaction_service.dart';
 
 import '../../../design/widgets/mt_bottom_navbar.dart';
 import '../../auth/bloc/auth_bloc.dart';
@@ -8,7 +15,6 @@ import '../bloc/dashboard_bloc.dart';
 import 'pages/allowance_page.dart';
 import 'pages/stipend_page.dart';
 import 'pages/stocks_page.dart';
-import 'widgets/balance_card.dart';
 import 'widgets/transaction_card.dart';
 
 class MtDashboard extends StatelessWidget {
@@ -57,6 +63,26 @@ class MtDashboard extends StatelessWidget {
               children: _pages,
             ),
             bottomNavigationBar: const MtBottomNavbar(),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                // TODO: show modal bottom sheet
+                FirebaseAuth auth = FirebaseAuth.instance;
+                User? user = auth.currentUser;
+                TransactionModel transaction = TransactionModel(
+                  amount: 100,
+                  title: 'Pastries',
+                  category: SpendCategory.entertainment.name,
+                  createdAt: DateTime.now(),
+                  description: 'Bought some food',
+                  id: const Uuid().v1(),
+                  spendFrom: SpendFrom.stipend.name,
+                );
+                TransactionApiService.createDoc(transaction, user!.uid);
+              },
+              tooltip: 'Add Transaction',
+              child: const Icon(Icons.add),
+            ),
+
           );
         },
       ),

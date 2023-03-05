@@ -45,6 +45,9 @@ dependencies:
   sign_in_with_apple: ^4.3.0
   flutter_bloc: ^8.1.2
   animated_text_kit: ^4.2.2
+  intl: ^0.17.0
+  uuid: ^3.0.7
+
 
 dev_dependencies:
   flutter_test:

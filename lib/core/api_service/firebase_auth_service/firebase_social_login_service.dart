@@ -23,7 +23,19 @@ class FirebaseSocialLoginService {
         idToken: googleAuth?.idToken,
       );
 
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      final isNew = userCredential.additionalUserInfo?.isNewUser;
+      return ApiResponse(data: isNew);
+    } catch (e) {
+      myLogger.logError(e);
+      return ApiResponse(error: e.toString());
+    }
+  }
+
+  Future<ApiResponse<bool>> signOut() async {
+    await FirebaseAuth.instance.signOut();
+    try {
       return const ApiResponse(data: true);
     } catch (e) {
       myLogger.logError(e);

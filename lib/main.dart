@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'features/auth/ui/login.dart';
 import 'core/logger/logger_modules/devtools_logger_module.dart';
 import 'core/logger/my_logger.dart';

@@ -7,6 +7,7 @@ import 'package:money_tracker/core/api_service/firebase_crud_service/user_servic
 import '../../../core/api_service/firebase_auth_service/firebase_social_login_service.dart';
 import '../../../core/api_service/firebase_crud_service/user_service/user_service.dart';
 
+
 part 'auth_event.dart';
 part 'auth_state.dart';
 

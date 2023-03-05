@@ -43,6 +43,16 @@ class FirebaseSocialLoginService {
     }
   }
 
+  Future<ApiResponse<bool>> signOut() async {
+    await FirebaseAuth.instance.signOut();
+    try {
+      return const ApiResponse(data: true);
+    } catch (e) {
+      myLogger.logError(e);
+      return ApiResponse(error: e.toString());
+    }
+  }
+
   Future<ApiResponse<bool>> signInWithApple() async {
     try {
       String generateNonce([int length = 32]) {

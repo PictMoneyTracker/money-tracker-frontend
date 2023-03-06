@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/api_service/firebase_crud_service/stock_service/models/stock_model.dart';
 import '../../core/api_service/firebase_crud_service/stock_service/stock_service.dart';
 import '../../design/widgets/mt_loader.dart';
+import '../dashboard/bloc/dashboard_bloc.dart';
 import 'stock_web_view.dart';
 
 Future<String> loadStockAsset() async {
@@ -95,15 +97,9 @@ class StockSearchDelegate extends SearchDelegate<String> {
                     User? user = FirebaseAuth.instance.currentUser;
                     final StockModel stock = snapshot.data![index];
                     StockApiService.createDoc(stock, user!.uid);
+                    BlocProvider.of<DashboardBloc>(context)
+                        .add(DashboardIndexChangedEvent(0));
                     close(context, '');
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => StockWebView(
-                          stockSymbol: stock.symbol,
-                        ),
-                      ),
-                    );
                   },
                 );
               } else {

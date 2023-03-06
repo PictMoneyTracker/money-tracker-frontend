@@ -17,7 +17,11 @@ class AllowancePageLoadedState extends DashboardState {}
 
 class StipendPageLoadedState extends DashboardState {}
 
-class StocksPageLoadedState extends DashboardState {}
+class StocksPageLoadedState extends DashboardState {
+  final List<StockModel> stocks;
+
+  StocksPageLoadedState(this.stocks);
+}
 
 class DashboardErrorState extends DashboardState {
   final String message;

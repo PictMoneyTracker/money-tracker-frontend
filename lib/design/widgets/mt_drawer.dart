@@ -45,12 +45,7 @@ class MtDrawer extends StatelessWidget {
               title: const Text('Home'),
               // trailing: Icon(Icons.more_vert),
               onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MtDashboard(),
-                  ),
-                );
+                Navigator.pop(context);
               },
             ),
           ),
@@ -78,10 +73,6 @@ class MtDrawer extends StatelessWidget {
               ),
               // trailing: Icon(Icons.more_vert),
               onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
               },
             ),
           ),

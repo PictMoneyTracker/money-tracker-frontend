@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../stocks/stock_search_delegate.dart';
+import '../../../../core/functions/general_functions.dart';
+import '../../../stocks/stock_web_view.dart';
 
 class StockCard extends StatelessWidget {
   const StockCard({
@@ -18,10 +19,11 @@ class StockCard extends StatelessWidget {
       title: Text(stockName),
       subtitle: Text(stockSymbol),
       onTap: () {
-        // TODO: add to user's stock list
-        showSearch(
-          context: context,
-          delegate: StockSearchDelegate(),
+        navigate(
+          context,
+          StockWebView(
+            stockSymbol: stockSymbol,
+          ),
         );
       },
     );

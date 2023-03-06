@@ -1,25 +1,21 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uuid/uuid.dart';
 
-import 'package:money_tracker/features/stocks/stock_search_delegate.dart';
-
-import '../../../core/api_service/firebase_crud_service/transaction_service/models/transaction_model.dart';
-import '../../../core/api_service/firebase_crud_service/transaction_service/transaction_service.dart';
-import '../../../core/api_service/firebase_crud_service/utils/categories.dart';
+import '../../../design/widgets/mt_loader.dart';
 import '../../../core/functions/general_functions.dart';
 import '../../../design/widgets/mt_bottom_navbar.dart';
 import '../../../design/widgets/mt_drawer.dart';
 import '../../auth/bloc/auth_bloc.dart';
 import '../../auth/ui/login.dart';
+import '../../stocks/stock_search_delegate.dart';
 import '../bloc/dashboard_bloc.dart';
 import 'pages/allowance_page.dart';
 import 'pages/stipend_page.dart';
 import 'pages/stocks_page.dart';
+import 'widgets/stock_card.dart';
 import 'widgets/transaction_card.dart';
 
 class MtDashboard extends StatefulWidget {
@@ -30,12 +26,6 @@ class MtDashboard extends StatefulWidget {
 }
 
 class _MtDashboardState extends State<MtDashboard> {
-  final List<Widget> _pages = const [
-    StocksPage(),
-    StipendPage(),
-    AllowancePage(),
-  ];
-
   late StreamSubscription subscription;
 
   @override
@@ -46,16 +36,18 @@ class _MtDashboardState extends State<MtDashboard> {
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
       // Got a new connectivity status!
-      if (result == ConnectivityResult.none) {
+      if (result != ConnectivityResult.mobile &&
+          result != ConnectivityResult.wifi) {
         scaffoldMessage(context, 'No internet connection');
       }
     });
+    BlocProvider.of<DashboardBloc>(context).add(DashboardIndexChangedEvent(0));
+  }
 
-    @override
-    void dispose() {
-      subscription.cancel();
-      super.dispose();
-    }
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -76,36 +68,41 @@ class _MtDashboardState extends State<MtDashboard> {
             drawer: const MtDrawer(),
             appBar: AppBar(
               title: const Text('Money Tracker'),
-              actions: <Widget>[
-                IconButton(
-                  onPressed: () {
-                    BlocProvider.of<AuthBloc>(context).add(AuthLogoutEvent());
-                  },
-                  icon: const Icon(Icons.settings),
-                  tooltip: 'Show Settings',
-                ),
-              ],
             ),
             body: IndexedStack(
               index: context.select((DashboardBloc bloc) => bloc.currentIndex),
-              children: _pages,
+              children: [
+                state is StocksPageLoadedState
+                    ? StocksPage(stocks: state.stocks)
+                    : const Center(
+                        child: MtLoader(),
+                      ),
+                state is StipendPageLoadedState
+                    ? const StipendPage()
+                    : const Center(
+                        child: MtLoader(),
+                      ),
+                state is AllowancePageLoadedState
+                    ? const AllowancePage()
+                    : const Center(
+                        child: MtLoader(),
+                      ),
+              ],
             ),
             bottomNavigationBar: const MtBottomNavbar(),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
+                if (state is StocksPageLoadedState) {
+                  showSearch(
+                    context: context,
+                    delegate: StockSearchDelegate(),
+                  );
+                } else if (state is DashboardLoadingState) {
+                  scaffoldMessage(context, 'Loading...');
+                } else if (state is DashboardErrorState) {
+                  scaffoldMessage(context, state.message);
+                }
                 // TODO: show modal bottom sheet
-                FirebaseAuth auth = FirebaseAuth.instance;
-                User? user = auth.currentUser;
-                TransactionModel transaction = TransactionModel(
-                  amount: 100,
-                  title: 'Pastries',
-                  category: SpendCategory.entertainment.name,
-                  createdAt: DateTime.now(),
-                  description: 'Bought some food',
-                  id: const Uuid().v1(),
-                  spendFrom: SpendFrom.stipend.name,
-                );
-                TransactionApiService.createDoc(transaction, user!.uid);
               },
               tooltip: 'Add Transaction',
               child: const Icon(Icons.add),
@@ -122,24 +119,93 @@ class TransactionHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 10,
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-          margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 2,
-                blurRadius: 5,
-                // offset: Offset(0, 3),
-              ),
-            ],
-          ),
-          child: const TransactionCard(),
+    return BlocBuilder<DashboardBloc, DashboardState>(
+      builder: (context, state) {
+        if (state is DashboardLoadingState) {
+          return const Center(
+            child: MtLoader(),
+          );
+        } else if (state is DashboardErrorState) {
+          return Center(
+            child: Text(state.message),
+          );
+        } else if (state is StocksPageLoadedState) {
+          return ListView.builder(
+            itemCount: state.stocks.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                margin:
+                    const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      // offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: StockCard(
+                  stockName: state.stocks[index].name,
+                  stockSymbol: state.stocks[index].symbol,
+                ),
+              );
+            },
+          );
+        }
+        else if (state is StipendPageLoadedState) {
+          return ListView.builder(
+            // itemCount: state.stipends.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                margin:
+                    const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      // offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: TransactionCard(),
+              );
+            },
+          );
+        }
+        else if (state is AllowancePageLoadedState) {
+          return ListView.builder(
+            // itemCount: state.allowances.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                margin:
+                    const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      // offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: TransactionCard(),
+              );
+            },
+          );
+        }
+        return const Center(
+          child: Text('No data'),
         );
       },
     );

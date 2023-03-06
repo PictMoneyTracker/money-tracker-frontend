@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
+  static final formKey1 = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
-
     final TextEditingController stipendController = TextEditingController();
     final TextEditingController allowanceController = TextEditingController();
     final TextEditingController stocksController = TextEditingController();
@@ -16,7 +15,7 @@ class SettingsPage extends StatelessWidget {
       body: Container(
         padding: const EdgeInsets.all(20),
         child: Form(
-          key: formKey,
+          key: formKey1,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -98,7 +97,7 @@ class SettingsPage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 10),
                   ),
                   onPressed: () {
-                    if (formKey.currentState!.validate()) {
+                    if (formKey1.currentState!.validate()) {
                       // Todo: Save the data, show alert dialog
                     }
                   },

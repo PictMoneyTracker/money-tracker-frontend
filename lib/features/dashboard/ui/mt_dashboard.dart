@@ -1,14 +1,19 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../core/api_service/firebase_crud_service/transaction_service/models/transaction_model.dart';
-import '../../../design/widgets/mt_drawer.dart';
-import '../../../core/api_service/firebase_crud_service/utils/categories.dart';
-import '../../../core/api_service/firebase_crud_service/transaction_service/transaction_service.dart';
+import 'package:money_tracker/features/stocks/stock_search_delegate.dart';
 
+import '../../../core/api_service/firebase_crud_service/transaction_service/models/transaction_model.dart';
+import '../../../core/api_service/firebase_crud_service/transaction_service/transaction_service.dart';
+import '../../../core/api_service/firebase_crud_service/utils/categories.dart';
+import '../../../core/functions/general_functions.dart';
 import '../../../design/widgets/mt_bottom_navbar.dart';
+import '../../../design/widgets/mt_drawer.dart';
 import '../../auth/bloc/auth_bloc.dart';
 import '../../auth/ui/login.dart';
 import '../bloc/dashboard_bloc.dart';
@@ -17,14 +22,41 @@ import 'pages/stipend_page.dart';
 import 'pages/stocks_page.dart';
 import 'widgets/transaction_card.dart';
 
-class MtDashboard extends StatelessWidget {
+class MtDashboard extends StatefulWidget {
   const MtDashboard({super.key});
 
+  @override
+  State<MtDashboard> createState() => _MtDashboardState();
+}
+
+class _MtDashboardState extends State<MtDashboard> {
   final List<Widget> _pages = const [
     StocksPage(),
     StipendPage(),
     AllowancePage(),
   ];
+
+  late StreamSubscription subscription;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      // Got a new connectivity status!
+      if (result == ConnectivityResult.none) {
+        scaffoldMessage(context, 'No internet connection');
+      }
+    });
+
+    @override
+    void dispose() {
+      subscription.cancel();
+      super.dispose();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -9,7 +9,6 @@ import '../../core/api_service/firebase_crud_service/stock_service/models/stock_
 import '../../core/api_service/firebase_crud_service/stock_service/stock_service.dart';
 import '../../design/widgets/mt_loader.dart';
 import '../dashboard/bloc/dashboard_bloc.dart';
-import 'stock_web_view.dart';
 
 Future<String> loadStockAsset() async {
   return await rootBundle.loadString('assets/stocks.json');
@@ -93,7 +92,6 @@ class StockSearchDelegate extends SearchDelegate<String> {
                   ),
                   onTap: () {
                     // TODO: Change auth api call
-                    FirebaseAuth auth = FirebaseAuth.instance;
                     User? user = FirebaseAuth.instance.currentUser;
                     final StockModel stock = snapshot.data![index];
                     StockApiService.createDoc(stock, user!.uid);

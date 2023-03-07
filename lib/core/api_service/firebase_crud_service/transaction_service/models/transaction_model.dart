@@ -8,7 +8,7 @@ class TransactionModel {
   final int amount;
   final String category;
   final String spendFrom;
-  final DateTime? createdAt;
+  final String? createdAt;
   TransactionModel({
     required this.id,
     required this.title,
@@ -27,7 +27,7 @@ class TransactionModel {
       'amount': amount,
       'category': category,
       'spendFrom': spendFrom,
-      'createdAt': createdAt?.millisecondsSinceEpoch,
+      'createdAt': createdAt?.toString(),
     };
   }
 
@@ -39,7 +39,7 @@ class TransactionModel {
       amount: map['amount'] as int,
       category: map['category'] as String,
       spendFrom: map['spendFrom'] as String,
-      createdAt: map['createdAt'] != null ? DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int) : null,
+      createdAt: map['createdAt'],
     );
   }
 
@@ -64,7 +64,7 @@ class TransactionModel {
       amount: amount ?? this.amount,
       category: category ?? this.category,
       spendFrom: spendFrom ?? this.spendFrom,
-      createdAt: createdAt ?? this.createdAt,
+      createdAt: createdAt != null ? createdAt.toString() : this.createdAt,
     );
   }
 

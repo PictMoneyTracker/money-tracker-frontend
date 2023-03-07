@@ -5,6 +5,7 @@
 // server - firebase
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../utils/categories.dart';
 import '../../../api_layer/api_response.dart';
 import 'models/transaction_model.dart';
 
@@ -64,15 +65,24 @@ class TransactionApiService {
     }
   }
 
-  static Future<ApiResponse<List<TransactionModel>>> readCollection(String uid) async {
+  static Future<ApiResponse<List<TransactionModel>>> readCollection(
+    String uid,
+    SpendFrom spendFrom,
+  ) async {
     try {
       List<TransactionModel> models = [];
-      QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection('users').doc(uid).collection('transactions').get();
-
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('transactions')
+          .where('spendFrom', isEqualTo: spendFrom.name)
+          .orderBy('createdAt', descending: true)
+          .get();
       for (var i = 0; i < querySnapshot.docs.length; i++) {
-        models.add(TransactionModel.fromMap(
-            querySnapshot.docs[i].data() as Map<String, dynamic>));
+        models.add(
+          TransactionModel.fromMap(
+              querySnapshot.docs[i].data() as Map<String, dynamic>),
+        );
       }
       return ApiResponse(data: models);
     } catch (e) {

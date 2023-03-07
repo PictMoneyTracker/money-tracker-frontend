@@ -4,10 +4,10 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../design/widgets/mt_loader.dart';
 import '../../../core/functions/general_functions.dart';
 import '../../../design/widgets/mt_bottom_navbar.dart';
 import '../../../design/widgets/mt_drawer.dart';
+import '../../../design/widgets/mt_loader.dart';
 import '../../auth/bloc/auth_bloc.dart';
 import '../../auth/ui/login.dart';
 import '../../stocks/stock_search_delegate.dart';
@@ -30,7 +30,6 @@ class _MtDashboardState extends State<MtDashboard> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     subscription = Connectivity()
         .onConnectivityChanged
@@ -101,8 +100,19 @@ class _MtDashboardState extends State<MtDashboard> {
                   scaffoldMessage(context, 'Loading...');
                 } else if (state is DashboardErrorState) {
                   scaffoldMessage(context, state.message);
+                } else if (state is StipendPageLoadedState) {
+                  // TODO: show modal bottom sheet
+                  // TransactionApiService.createDoc(
+                  //   txnModel,
+                  //   FirebaseAuth.instance.currentUser!.uid,
+                  // );
+                } else if (state is AllowancePageLoadedState) {
+                  // TODO: show modal bottom sheet
+                  // TransactionApiService.createDoc(
+                  //   txnModel,
+                  //   FirebaseAuth.instance.currentUser!.uid,
+                  // );
                 }
-                // TODO: show modal bottom sheet
               },
               tooltip: 'Add Transaction',
               child: const Icon(Icons.add),
@@ -155,10 +165,9 @@ class TransactionHistory extends StatelessWidget {
               );
             },
           );
-        }
-        else if (state is StipendPageLoadedState) {
+        } else if (state is StipendPageLoadedState) {
           return ListView.builder(
-            // itemCount: state.stipends.length,
+            itemCount: state.stipendTransactions.length,
             itemBuilder: (BuildContext context, int index) {
               return Container(
                 margin:
@@ -175,14 +184,15 @@ class TransactionHistory extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: TransactionCard(),
+                child: TransactionCard(
+                  transaction: state.stipendTransactions[index],
+                ),
               );
             },
           );
-        }
-        else if (state is AllowancePageLoadedState) {
+        } else if (state is AllowancePageLoadedState) {
           return ListView.builder(
-            // itemCount: state.allowances.length,
+            itemCount: state.allowanceTransactions.length,
             itemBuilder: (BuildContext context, int index) {
               return Container(
                 margin:
@@ -199,7 +209,9 @@ class TransactionHistory extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: TransactionCard(),
+                child: TransactionCard(
+                  transaction: state.allowanceTransactions[index],
+                ),
               );
             },
           );

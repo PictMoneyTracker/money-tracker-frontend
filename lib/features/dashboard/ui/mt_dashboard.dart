@@ -4,8 +4,10 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/api_service/firebase_crud_service/utils/categories.dart';
 import '../../../core/functions/general_functions.dart';
 import '../../../design/widgets/mt_bottom_navbar.dart';
+import '../../../design/widgets/mt_bottom_sheet.dart';
 import '../../../design/widgets/mt_drawer.dart';
 import '../../../design/widgets/mt_loader.dart';
 import '../../auth/bloc/auth_bloc.dart';
@@ -101,17 +103,37 @@ class _MtDashboardState extends State<MtDashboard> {
                 } else if (state is DashboardErrorState) {
                   scaffoldMessage(context, state.message);
                 } else if (state is StipendPageLoadedState) {
-                  // TODO: show modal bottom sheet
-                  // TransactionApiService.createDoc(
-                  //   txnModel,
-                  //   FirebaseAuth.instance.currentUser!.uid,
-                  // );
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    context: context,
+                    builder: (context) {
+                      return const MtBottomSheet(
+                        spentFrom: SpendFrom.stipend,
+                      );
+                    },
+                  );
                 } else if (state is AllowancePageLoadedState) {
-                  // TODO: show modal bottom sheet
-                  // TransactionApiService.createDoc(
-                  //   txnModel,
-                  //   FirebaseAuth.instance.currentUser!.uid,
-                  // );
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    context: context,
+                    builder: (context) {
+                      return const MtBottomSheet(
+                        spentFrom: SpendFrom.allowance,
+                      );
+                    },
+                  );
                 }
               },
               tooltip: 'Add Transaction',

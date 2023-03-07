@@ -44,9 +44,7 @@ class TransactionCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(
-                width: 10.0,
-              ),
+              const Expanded(child: SizedBox()),
               const Icon(
                 Icons.currency_rupee,
                 color: Colors.grey,

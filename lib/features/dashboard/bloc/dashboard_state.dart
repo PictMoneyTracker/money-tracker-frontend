@@ -13,9 +13,17 @@ class DashboardIndexChangedState extends DashboardState {
 
 class DashboardLoadingState extends DashboardState {}
 
-class AllowancePageLoadedState extends DashboardState {}
+class AllowancePageLoadedState extends DashboardState {
+  final List<TransactionModel> allowanceTransactions;
 
-class StipendPageLoadedState extends DashboardState {}
+  AllowancePageLoadedState(this.allowanceTransactions);
+}
+
+class StipendPageLoadedState extends DashboardState {
+  final List<TransactionModel> stipendTransactions;
+
+  StipendPageLoadedState(this.stipendTransactions);
+}
 
 class StocksPageLoadedState extends DashboardState {
   final List<StockModel> stocks;

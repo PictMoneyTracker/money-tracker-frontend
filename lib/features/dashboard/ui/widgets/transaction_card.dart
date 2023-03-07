@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/api_service/firebase_crud_service/transaction_service/models/transaction_model.dart';
+
 class TransactionCard extends StatelessWidget {
   const TransactionCard({
     super.key,
+    required this.transaction,
   });
+
+  final TransactionModel transaction;
 
   @override
   Widget build(BuildContext context) {
     String getCustomFormattedDateTime(String givenDateTime, String dateFormat) {
-      // dateFormat = 'MM/dd/yy';
       final DateTime docDateTime = DateTime.parse(givenDateTime);
       return DateFormat(dateFormat).format(docDateTime);
     }
@@ -19,43 +23,57 @@ class TransactionCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Title',
-              style: TextStyle(fontSize: 20.0), textAlign: TextAlign.left),
+          Text(
+            transaction.title,
+            style: const TextStyle(fontSize: 20.0),
+            textAlign: TextAlign.left,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
+            children: [
               SizedBox(
                 width: 250.0,
                 child: Text(
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sed eros turpis.",
+                  transaction.description ?? '',
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   softWrap: false,
-                  style: TextStyle(color: Colors.grey, fontSize: 15.0),
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 15.0,
+                  ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10.0,
               ),
-              Icon(
+              const Icon(
                 Icons.currency_rupee,
                 color: Colors.grey,
                 size: 20.0,
               ),
               Text(
-                "100",
-                style: TextStyle(color: Colors.green, fontSize: 15.0),
+                transaction.amount.toString(),
+                style: const TextStyle(
+                  color: Colors.green,
+                  fontSize: 15.0,
+                ),
               ),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Category',
-                  style: TextStyle(fontSize: 15.0), textAlign: TextAlign.left),
+              Text(
+                transaction.category,
+                style: const TextStyle(fontSize: 15.0),
+                textAlign: TextAlign.left,
+              ),
               Text(
                 getCustomFormattedDateTime(
-                    '2021-02-15T18:42:49.608466Z', 'dd/MM/yy'),
+                  transaction.createdAt!,
+                  'dd/MM/yy',
+                ),
               ),
             ],
           ),

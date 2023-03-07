@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:money_tracker/features/dashboard/ui/mt_dashboard.dart';
 
 import '../../features/auth/bloc/auth_bloc.dart';
 import '../pages/settings_page.dart';

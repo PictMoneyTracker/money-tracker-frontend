@@ -1,10 +1,12 @@
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:meta/meta.dart';
 
-import '../../../core/api_service/firebase_crud_service/stock_service/stock_service.dart';
+import '../../../core/api_service/firebase_crud_service/utils/categories.dart';
 import '../../../core/api_service/firebase_crud_service/stock_service/models/stock_model.dart';
+import '../../../core/api_service/firebase_crud_service/stock_service/stock_service.dart';
 import '../../../core/api_service/firebase_crud_service/transaction_service/models/transaction_model.dart';
+import '../../../core/api_service/firebase_crud_service/transaction_service/transaction_service.dart';
 
 part 'dashboard_event.dart';
 part 'dashboard_state.dart';
@@ -35,9 +37,25 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         }
         emit(StocksPageLoadedState(stocks));
       } else if (_currentIndex == 1) {
-        emit(StipendPageLoadedState());
+        final transactions = <TransactionModel>[];
+        final response = await TransactionApiService.readCollection(
+            user!.uid, SpendFrom.stipend);
+        if (response.hasData) {
+          transactions.addAll(response.getData!);
+        } else if (response.hasException) {
+          emit(DashboardErrorState(response.getException!));
+        }
+        emit(StipendPageLoadedState(transactions));
       } else if (_currentIndex == 2) {
-        emit(AllowancePageLoadedState());
+        final transactions = <TransactionModel>[];
+        final response = await TransactionApiService.readCollection(
+            user!.uid, SpendFrom.allowance);
+        if (response.hasData) {
+          transactions.addAll(response.getData!);
+        } else if (response.hasException) {
+          emit(DashboardErrorState(response.getException!));
+        }
+        emit(AllowancePageLoadedState(transactions));
       } else {
         emit(
           DashboardErrorState('Index out of bounds'),

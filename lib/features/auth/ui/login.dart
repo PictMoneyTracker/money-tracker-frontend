@@ -74,7 +74,7 @@ class AuthPage extends StatelessWidget {
           if (state is AuthLoadingState) {
             return const Center(
               child: MtLoader(),
-            ); // TODO: extract to widget
+            );
           } else {
             return const Text('Unknown state');
           }

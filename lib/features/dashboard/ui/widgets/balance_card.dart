@@ -33,7 +33,7 @@ class BalanceCard extends StatelessWidget {
                   const Text(
                     "Total Balance",
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 20.0,
                       color: Colors.white,
                     ),
                   ),
@@ -59,25 +59,23 @@ class BalanceCard extends StatelessWidget {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(
+                    children: [
+                      const Icon(
                         Icons.arrow_upward_rounded,
                         color: Color.fromARGB(255, 0, 158, 5),
                         size: 30,
                       ),
-                      Text(
+                      const Text(
                         "Income",
                         style: TextStyle(
                           fontSize: 15.0,
                           color: Colors.white,
                         ),
                       ),
-                      SizedBox(
-                        width: 80,
-                      ),
-                      Icon(Icons.arrow_downward_rounded,
+                      Expanded(child: Container()),
+                      const Icon(Icons.arrow_downward_rounded,
                           color: Colors.red, size: 30),
-                      Text(
+                      const Text(
                         "Expenses",
                         style: TextStyle(
                           fontSize: 15.0,
@@ -88,20 +86,20 @@ class BalanceCard extends StatelessWidget {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.currency_rupee, color: Colors.white, size: 20),
-                      Text(
+                    children: [
+                      const Icon(Icons.currency_rupee,
+                          color: Colors.white, size: 20),
+                      const Text(
                         "10000",
                         style: TextStyle(
                           fontSize: 20.0,
                           color: Colors.white,
                         ),
                       ),
-                      SizedBox(
-                        width: 80,
-                      ),
-                      Icon(Icons.currency_rupee, color: Colors.white, size: 20),
-                      Text(
+                      Expanded(child: Container()),
+                      const Icon(Icons.currency_rupee,
+                          color: Colors.white, size: 20),
+                      const Text(
                         "100",
                         style: TextStyle(
                           fontSize: 20.0,

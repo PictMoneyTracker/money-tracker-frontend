@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_tracker/design/widgets/mt_alert_box.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -99,6 +100,15 @@ class SettingsPage extends StatelessWidget {
                   onPressed: () {
                     if (formKey1.currentState!.validate()) {
                       // Todo: Save the data, show alert dialog
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return const MtAlertBox(
+                            title: 'Alert',
+                            content: "Alert message",
+                          );
+                        },
+                      );
                     }
                   },
                   child: const Text(

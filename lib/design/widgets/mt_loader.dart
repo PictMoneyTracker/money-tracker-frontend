@@ -15,8 +15,7 @@ class MtLoader extends StatelessWidget {
         SizedBox(height: 10),
         // CircularProgressIndicator(),
         Image(
-          image: NetworkImage(
-              'https://media.tenor.com/yQPfHp6AmGgAAAAi/money-with-wings-joypixels.gif'),
+          image: AssetImage('assets/images/money_with_wings.gif'),
           height: 60,
         ),
       ],

@@ -27,8 +27,8 @@ class AuthPage extends StatelessWidget {
             return ListView(
               padding: const EdgeInsets.all(15),
               children: <Widget>[
-                Image.network(
-                  'https://www.pngarts.com/files/17/Finance-PNG-Free-Download.png',
+                Image.asset(
+                  'assets/images/clipart_money.png',
                   height: 400,
                   width: 300,
                 ),
@@ -54,8 +54,8 @@ class AuthPage extends StatelessWidget {
                   onPressed: () {
                     BlocProvider.of<AuthBloc>(context).add(AuthRequestEvent());
                   },
-                  icon: Image.network(
-                    'https://developers.google.com/identity/images/g-logo.png',
+                  icon: Image.asset(
+                    'assets/images/google_logo.png',
                     height: 32,
                     width: 32,
                   ),

@@ -28,7 +28,6 @@ class MtAlertBox extends StatelessWidget {
           onPressed: () {
             onPressed();
             Navigator.of(context).pop();
-            Navigator.of(context).pop();
           },
           child: const Text('OK'),
         ),

@@ -26,8 +26,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     });
 
     on<DashboardIndexChangedEvent>((event, emit) async {
-      final userModelResponse = await UserApiService.readDoc(user!.uid);
       emit(DashboardLoadingState());
+      final userModelResponse = await UserApiService.readDoc(user!.uid);
+      
       _currentIndex = event.index;
       if (_currentIndex == 0) {
         final stocks = <StockModel>[];
@@ -39,6 +40,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         }
         emit(StocksPageLoadedState(stocks));
       } else if (_currentIndex == 1) {
+        if (userModelResponse.hasException) {
+          emit(DashboardErrorState(userModelResponse.getException!));
+        }
         final stipendBalance = userModelResponse.getData!.stipendTotal;
 
         int stipendSpent = 0;
@@ -46,9 +50,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         final response = await TransactionApiService.readCollection(
             user.uid, SpendFrom.stipend);
 
-        if (userModelResponse.hasException) {
-          emit(DashboardErrorState(userModelResponse.getException!));
-        }
         if (response.hasData) {
           transactions.addAll(response.getData!);
           for (var element in transactions) {
@@ -65,6 +66,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           ),
         );
       } else if (_currentIndex == 2) {
+        if (userModelResponse.hasException) {
+          emit(DashboardErrorState(userModelResponse.getException!));
+        }
         final allowanceBalance = userModelResponse.getData!.allowanceTotal;
 
         int allowanceSpent = 0;

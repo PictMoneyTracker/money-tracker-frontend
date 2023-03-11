@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../design/widgets/mt_loader.dart';
+import '../../bloc/dashboard_bloc.dart';
 import '../mt_dashboard.dart';
 import '../widgets/balance_card.dart';
 
@@ -11,7 +14,20 @@ class StipendPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const BalanceCard(),
+        BlocBuilder<DashboardBloc, DashboardState>(
+          builder: (context, state) {
+            if (state is StipendPageLoadedState) {
+              return BalanceCard(
+                totalBalance: state.stipendBalance - state.stipendSpent,
+                income: state.stipendBalance,
+                expenses: state.stipendSpent,
+              );
+            } 
+            return const Center(
+              child: MtLoader(),
+            );
+          },
+        ),
         const SizedBox(
           height: 25,
         ),

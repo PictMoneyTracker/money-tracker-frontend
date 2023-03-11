@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 class MtAlertBox extends StatelessWidget {
   final String content;
   final String title;
+  final Function onPressed;
 
-  const MtAlertBox({super.key, required this.title, required this.content});
+  const MtAlertBox({
+    Key? key,
+    required this.content,
+    required this.title,
+    required this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +19,17 @@ class MtAlertBox extends StatelessWidget {
       content: Text(content),
       actions: <Widget>[
         TextButton(
-          onPressed: () => Navigator.pop(context, 'Cancel'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
           child: const Text('Cancel'),
         ),
         TextButton(
-          onPressed: () => Navigator.pop(context, 'OK'),
+          onPressed: () {
+            onPressed();
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+          },
           child: const Text('OK'),
         ),
       ],

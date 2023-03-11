@@ -23,6 +23,9 @@ class UserApiService {
         'name': user.name,
         'email': user.email,
         'photoUrl': user.photoUrl,
+        'stockTotal': user.stockTotal,
+        'allowanceTotal': user.allowanceTotal,
+        'stipendTotal': user.stipendTotal,
       });
       return const ApiResponse(data: true);
     } catch (e) {

@@ -1,14 +1,43 @@
-import 'package:flutter/material.dart';
-import 'package:money_tracker/design/widgets/mt_alert_box.dart';
+import 'dart:developer';
 
-class SettingsPage extends StatelessWidget {
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
+import '../../core/api_service/firebase_crud_service/user_service/models/user_model.dart';
+import '../../core/api_service/firebase_crud_service/user_service/user_service.dart';
+import '../widgets/mt_alert_box.dart';
+
+class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  User? user = FirebaseAuth.instance.currentUser;
   static final formKey1 = GlobalKey<FormState>();
+
+  final TextEditingController stipendController = TextEditingController();
+  final TextEditingController allowanceController = TextEditingController();
+  final TextEditingController stocksController = TextEditingController();
+
+  @override
+  void initState() {
+    UserApiService.readDoc(user!.uid).then((value) {
+      if (value.hasException) {
+        log(value.getException!);
+      }
+      final currentUser = value.getData;
+      stipendController.text = currentUser!.stipendTotal.toString();
+      allowanceController.text = currentUser.allowanceTotal.toString();
+      stocksController.text = currentUser.stockTotal.toString();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final TextEditingController stipendController = TextEditingController();
-    final TextEditingController allowanceController = TextEditingController();
-    final TextEditingController stocksController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -29,6 +58,9 @@ class SettingsPage extends StatelessWidget {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
+                  }
+                  if (int.parse(value) <= 0) {
+                    return 'Please enter a valid number';
                   }
                   return null;
                 },
@@ -54,6 +86,9 @@ class SettingsPage extends StatelessWidget {
                     if (value == null || value.isEmpty) {
                       return 'Please enter some text';
                     }
+                    if (int.parse(value) <= 0) {
+                      return 'Please enter a valid number';
+                    }
                     return null;
                   },
                   controller: allowanceController,
@@ -76,6 +111,9 @@ class SettingsPage extends StatelessWidget {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter some text';
+                    }
+                    if (int.parse(value) <= 0) {
+                      return 'Please enter a valid number';
                     }
                     return null;
                   },
@@ -100,12 +138,23 @@ class SettingsPage extends StatelessWidget {
                   onPressed: () {
                     if (formKey1.currentState!.validate()) {
                       // Todo: Save the data, show alert dialog
+                      UserModel updatedUser = UserModel(
+                        id: user!.uid,
+                        email: user!.email!,
+                        name: user!.displayName!,
+                        photoUrl: user!.photoURL,
+                        stipendTotal: int.parse(stipendController.text),
+                        allowanceTotal: int.parse(allowanceController.text),
+                        stockTotal: int.parse(stocksController.text),
+                      );
+                      callback() => UserApiService.updateDoc(updatedUser);
                       showDialog(
                         context: context,
                         builder: (context) {
-                          return const MtAlertBox(
+                          return MtAlertBox(
                             title: 'Alert',
                             content: "Alert message",
+                            onPressed: callback,
                           );
                         },
                       );

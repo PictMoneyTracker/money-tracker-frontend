@@ -16,7 +16,7 @@ class StocksPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const BalanceCard(),
+        // const BalanceCard(),
         const SizedBox(
           height: 25,
         ),

@@ -1,11 +1,15 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/api_service/firebase_crud_service/transaction_service/models/transaction_model.dart';
+import '../../../core/api_service/firebase_crud_service/transaction_service/transaction_service.dart';
 import '../../../core/api_service/firebase_crud_service/utils/categories.dart';
 import '../../../core/functions/general_functions.dart';
+import '../../../design/widgets/mt_alert_box.dart';
 import '../../../design/widgets/mt_bottom_navbar.dart';
 import '../../../design/widgets/mt_bottom_sheet.dart';
 import '../../../design/widgets/mt_drawer.dart';
@@ -194,23 +198,61 @@ class TransactionHistory extends StatelessWidget {
           return ListView.builder(
             itemCount: state.stipendTransactions.length,
             itemBuilder: (BuildContext context, int index) {
-              return Container(
-                margin:
-                    const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      // offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: TransactionCard(
-                  transaction: state.stipendTransactions[index],
+              return GestureDetector(
+                onLongPress: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return MtAlertBox(
+                        content:
+                            "Are you sure you want to delete this transaction?",
+                        title: "Delete Transaction",
+                        onPressed: () {
+                          TransactionApiService.deleteDoc(
+                            FirebaseAuth.instance.currentUser!.uid,
+                            state.stipendTransactions[index].id,
+                          );
+                          BlocProvider.of<DashboardBloc>(context).add(
+                            DashboardIndexChangedEvent(1),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      TransactionModel transaction =
+                          state.stipendTransactions[index];
+                      return MtBottomSheet(
+                        spentFrom: SpendFrom.stipend,
+                        existingTransaction: transaction,
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 5.0,
+                    horizontal: 10.0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        // offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: TransactionCard(
+                    transaction: state.stipendTransactions[index],
+                  ),
                 ),
               );
             },
@@ -219,23 +261,59 @@ class TransactionHistory extends StatelessWidget {
           return ListView.builder(
             itemCount: state.allowanceTransactions.length,
             itemBuilder: (BuildContext context, int index) {
-              return Container(
-                margin:
-                    const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      // offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: TransactionCard(
-                  transaction: state.allowanceTransactions[index],
+              return GestureDetector(
+                onLongPress: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return MtAlertBox(
+                        content:
+                            "Are you sure you want to delete this transaction?",
+                        title: "Delete Transaction",
+                        onPressed: () {
+                          TransactionApiService.deleteDoc(
+                            FirebaseAuth.instance.currentUser!.uid,
+                            state.allowanceTransactions[index].id,
+                          );
+                          BlocProvider.of<DashboardBloc>(context).add(
+                            DashboardIndexChangedEvent(2),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      TransactionModel transaction =
+                          state.allowanceTransactions[index];
+                      return MtBottomSheet(
+                        spentFrom: SpendFrom.allowance,
+                        existingTransaction: transaction,
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 5.0, horizontal: 10.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        // offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: TransactionCard(
+                    transaction: state.allowanceTransactions[index],
+                  ),
                 ),
               );
             },

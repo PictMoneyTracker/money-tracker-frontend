@@ -147,14 +147,16 @@ class _SettingsPageState extends State<SettingsPage> {
                         allowanceTotal: int.parse(allowanceController.text),
                         stockTotal: int.parse(stocksController.text),
                       );
-                      callback() => UserApiService.updateDoc(updatedUser);
                       showDialog(
                         context: context,
                         builder: (context) {
                           return MtAlertBox(
                             title: 'Alert',
                             content: "Alert message",
-                            onPressed: callback,
+                            onPressed: () {
+                              UserApiService.updateDoc(updatedUser);
+                              Navigator.of(context).pop();
+                            },
                           );
                         },
                       );

@@ -36,6 +36,9 @@ class _MtDashboardState extends State<MtDashboard> {
 
   @override
   void initState() {
+    BlocProvider.of<DashboardBloc>(context).add(
+      DashboardInitialEvent(),
+    );
     super.initState();
     subscription = Connectivity()
         .onConnectivityChanged

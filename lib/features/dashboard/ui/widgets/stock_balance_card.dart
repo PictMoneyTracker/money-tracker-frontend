@@ -8,7 +8,7 @@ class StockBalanceCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.blue,
+        color: Colors.green,
       ),
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(8),

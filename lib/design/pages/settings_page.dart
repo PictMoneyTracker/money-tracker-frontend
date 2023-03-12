@@ -52,7 +52,8 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(height: 20),
               const Text(
                 "Stipend",
-                style: TextStyle(fontSize: 20, color: Colors.blue),
+                style: TextStyle(
+                    fontSize: 20, color: Color.fromRGBO(10, 173, 18, 0.698)),
               ),
               TextFormField(
                 validator: (value) {
@@ -79,7 +80,8 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(height: 20),
               const Text(
                 "Allowance",
-                style: TextStyle(fontSize: 20, color: Colors.blue),
+                style: TextStyle(
+                    fontSize: 20, color: Color.fromRGBO(10, 173, 18, 0.698)),
               ),
               TextFormField(
                   validator: (value) {
@@ -105,7 +107,8 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(height: 20),
               const Text(
                 "Stocks",
-                style: TextStyle(fontSize: 20, color: Colors.blue),
+                style: TextStyle(
+                    fontSize: 20, color: Color.fromRGBO(10, 173, 18, 0.698)),
               ),
               TextFormField(
                   validator: (value) {
@@ -134,6 +137,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 10),
+                    backgroundColor: Colors.green,
                   ),
                   onPressed: () {
                     if (formKey1.currentState!.validate()) {
@@ -152,7 +156,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         builder: (context) {
                           return MtAlertBox(
                             title: 'Alert',
-                            content: "Alert message",
+                            content: "Do you want to save?",
                             onPressed: () {
                               UserApiService.updateDoc(updatedUser);
                               Navigator.of(context).pop();

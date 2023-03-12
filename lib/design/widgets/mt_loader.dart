@@ -11,7 +11,8 @@ class MtLoader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: const [
         Text('Track your money, easily!',
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+            style: TextStyle(
+                fontSize: 15, fontWeight: FontWeight.w500, color: Colors.grey)),
         SizedBox(height: 10),
         // CircularProgressIndicator(),
         Image(

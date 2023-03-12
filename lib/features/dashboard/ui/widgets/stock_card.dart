@@ -16,8 +16,13 @@ class StockCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(stockName),
-      subtitle: Text(stockSymbol),
+      title: Text(stockName,
+          style: const TextStyle(
+              fontSize: 17.0,
+              color: Colors.green,
+              fontWeight: FontWeight.w500)),
+      subtitle: Text(stockSymbol,
+          style: const TextStyle(fontSize: 14.0, color: Colors.grey)),
       onTap: () {
         navigate(
           context,

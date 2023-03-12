@@ -4,6 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:money_tracker/core/api_service/firebase_crud_service/stock_service/stock_service.dart';
 
 import '../../../core/api_service/firebase_crud_service/transaction_service/models/transaction_model.dart';
 import '../../../core/api_service/firebase_crud_service/transaction_service/transaction_service.dart';
@@ -103,6 +104,7 @@ class _MtDashboardState extends State<MtDashboard> {
             ),
             bottomNavigationBar: const MtBottomNavbar(),
             floatingActionButton: FloatingActionButton(
+              backgroundColor: Colors.green,
               onPressed: () {
                 if (state is StocksPageLoadedState) {
                   showSearch(
@@ -176,24 +178,46 @@ class TransactionHistory extends StatelessWidget {
           return ListView.builder(
             itemCount: state.stocks.length,
             itemBuilder: (BuildContext context, int index) {
-              return Container(
-                margin:
-                    const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      // offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: StockCard(
-                  stockName: state.stocks[index].name,
-                  stockSymbol: state.stocks[index].symbol,
+              return GestureDetector(
+                onLongPress: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return MtAlertBox(
+                        content: "Are you sure you want to delete this stock?",
+                        title: "Delete Stock",
+                        onPressed: () {
+                          StockApiService.deleteDoc(
+                            FirebaseAuth.instance.currentUser!.uid,
+                            state.stocks[index].id,
+                          );
+                          BlocProvider.of<DashboardBloc>(context).add(
+                            DashboardIndexChangedEvent(0),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 5.0, horizontal: 10.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        // offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: StockCard(
+                    stockName: state.stocks[index].name,
+                    stockSymbol: state.stocks[index].symbol,
+                  ),
                 ),
               );
             },

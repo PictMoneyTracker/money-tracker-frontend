@@ -38,6 +38,8 @@ class AllowancePage extends StatelessWidget {
             textAlign: TextAlign.left,
             style: TextStyle(
               fontSize: 20,
+              fontWeight: FontWeight.w500,
+              color: Colors.green,
             ),
           ),
         ),

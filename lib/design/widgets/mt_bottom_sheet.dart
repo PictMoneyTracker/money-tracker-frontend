@@ -35,7 +35,6 @@ class _MtBottomSheetState extends State<MtBottomSheet> {
 
   @override
   void initState() {
-    // TODO: implement initState
     if (widget.existingTransaction != null) {
       titleController.text = widget.existingTransaction!.title;
       descriptionController.text = widget.existingTransaction!.description!;
@@ -68,7 +67,8 @@ class _MtBottomSheetState extends State<MtBottomSheet> {
                 const SizedBox(height: 20),
                 const Text(
                   "Title",
-                  style: TextStyle(fontSize: 15, color: Colors.blue),
+                  style: TextStyle(
+                      fontSize: 15, color: Color.fromRGBO(10, 173, 18, 0.698)),
                 ),
                 TextFormField(
                   maxLength: 50,
@@ -89,7 +89,8 @@ class _MtBottomSheetState extends State<MtBottomSheet> {
                 ),
                 const Text(
                   "Description",
-                  style: TextStyle(fontSize: 15, color: Colors.blue),
+                  style: TextStyle(
+                      fontSize: 15, color: Color.fromRGBO(10, 173, 18, 0.698)),
                 ),
                 TextFormField(
                   maxLength: 150,
@@ -97,6 +98,7 @@ class _MtBottomSheetState extends State<MtBottomSheet> {
                   maxLines: 10,
                   controller: descriptionController,
                   decoration: const InputDecoration(
+                    focusColor: Color.fromRGBO(10, 173, 18, 0.698),
                     hintText: 'Enter your Description',
                     border: OutlineInputBorder(),
                     counter: Offstage(),
@@ -106,7 +108,8 @@ class _MtBottomSheetState extends State<MtBottomSheet> {
                 ),
                 const Text(
                   "Amount",
-                  style: TextStyle(fontSize: 15, color: Colors.blue),
+                  style: TextStyle(
+                      fontSize: 15, color: Color.fromRGBO(10, 173, 18, 0.698)),
                 ),
                 TextFormField(
                   keyboardType: TextInputType.number,
@@ -132,7 +135,8 @@ class _MtBottomSheetState extends State<MtBottomSheet> {
                 ),
                 const Text(
                   "Category",
-                  style: TextStyle(fontSize: 15, color: Colors.blue),
+                  style: TextStyle(
+                      fontSize: 15, color: Color.fromRGBO(10, 173, 18, 0.698)),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -154,6 +158,8 @@ class _MtBottomSheetState extends State<MtBottomSheet> {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 10),
+                        backgroundColor:
+                            const Color.fromRGBO(10, 173, 18, 0.698),
                       ),
                       onPressed: () {
                         if (formKey.currentState!.validate()) {

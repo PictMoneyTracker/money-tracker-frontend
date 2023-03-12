@@ -12,6 +12,7 @@ class MtBottomNavbar extends StatelessWidget {
       iconSize: 25,
       selectedFontSize: 16,
       unselectedFontSize: 13,
+      selectedItemColor: const Color.fromRGBO(10, 173, 18, 0.698),
       currentIndex: context.select((DashboardBloc bloc) => bloc.currentIndex),
       onTap: (index) {
         BlocProvider.of<DashboardBloc>(context)
@@ -19,15 +20,21 @@ class MtBottomNavbar extends StatelessWidget {
       },
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.bar_chart),
+          icon: Icon(Icons.bar_chart, color: Colors.lightGreen),
           label: 'Stocks',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.paid),
+          icon: Icon(
+            Icons.paid,
+            color: Colors.lightGreen,
+          ),
           label: 'Stipend',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.account_balance_wallet),
+          icon: Icon(
+            Icons.account_balance_wallet,
+            color: Colors.lightGreen,
+          ),
           label: 'Allowance',
         ),
       ],

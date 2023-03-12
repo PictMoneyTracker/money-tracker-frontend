@@ -19,28 +19,31 @@ class MtDrawer extends StatelessWidget {
             height: 250,
             width: 250,
             child: DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.blue,
-              ), //BoxDecoration
+              decoration:
+                  const BoxDecoration(color: Colors.green), //BoxDecoration
               child: UserAccountsDrawerHeader(
-                decoration: const BoxDecoration(color: Colors.blue),
+                decoration: const BoxDecoration(color: Colors.green),
                 accountName: Text(
                   user.displayName!,
                   style: const TextStyle(fontSize: 18),
                 ),
                 accountEmail: Text(user.email!),
                 // currentAccountPictureSize: const Size.square(70),
-                currentAccountPicture: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: Image.network(user.photoURL!), //Text
+                currentAccountPicture: Center(
+                  child: CircleAvatar(
+                    radius: 60,
+                    backgroundImage: NetworkImage(user.photoURL!),
+                    // child: Image.network(user.photoURL!), //Text
+                  ),
                 ),
               ),
             ),
           ),
           Card(
             child: ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('Home'),
+              leading: const Icon(Icons.home, color: Colors.lightGreen),
+              title: const Text('Home',
+                  style: TextStyle(color: Colors.green, fontSize: 15)),
               // trailing: Icon(Icons.more_vert),
               onTap: () {
                 Navigator.pop(context);
@@ -49,8 +52,9 @@ class MtDrawer extends StatelessWidget {
           ),
           Card(
             child: ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Settings'),
+              leading: const Icon(Icons.settings, color: Colors.lightGreen),
+              title: const Text('Settings',
+                  style: TextStyle(color: Colors.green, fontSize: 15)),
               onTap: () {
                 Navigator.push(
                   context,
@@ -61,35 +65,41 @@ class MtDrawer extends StatelessWidget {
               },
             ),
           ),
+          // Card(
+          //   child: ListTile(
+          //     leading: const Icon(Icons.dark_mode, color: Colors.lightGreen),
+          //     title: const Text('Dark Mode',
+          //         style: TextStyle(color: Colors.green, fontSize: 15)),
+          //     trailing: Switch(
+          //       value: true,
+          //       onChanged: (value) {
+          //         ThemeData.dark();
+          //       },
+          //     ),
+          //     // trailing: Icon(Icons.more_vert),
+          //     onTap: () {},
+          //   ),
+          // ),
           Card(
             child: ListTile(
-              leading: const Icon(Icons.dark_mode),
-              title: const Text('Dark Mode'),
-              trailing: Switch(
-                value: true,
-                onChanged: (value) {},
+              leading: const Icon(Icons.exit_to_app, color: Colors.lightGreen),
+              title: const Text(
+                'Logout',
+                style: TextStyle(color: Colors.green, fontSize: 15),
               ),
-              // trailing: Icon(Icons.more_vert),
-              onTap: () {},
-            ),
-          ),
-          Card(
-            child: ListTile(
-              leading: const Icon(Icons.exit_to_app),
-              title: const Text('Logout'),
-              // trailing: Icon(Icons.more_vert),
               onTap: () {
                 BlocProvider.of<AuthBloc>(context).add(AuthLogoutEvent());
-                // Update the state of the app
-                // ...
-                // Then close the drawer
               },
             ),
           ),
           Expanded(child: Container()),
           Container(
-              padding: const EdgeInsets.all(8.5),
-              child: const Text("Made with ❤️ by Atharv & Purva"))
+            padding: const EdgeInsets.all(8.5),
+            child: const Text(
+              "Made with ❤️ by Atharv & Purva",
+              style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+            ),
+          )
         ],
       ),
     );

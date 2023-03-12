@@ -37,8 +37,10 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       } else if (userModelResponse.hasException) {
         emit(DashboardErrorState(userModelResponse.getException!));
       }
+
       _currentIndex = event.index;
       if (_currentIndex == 0) {
+        final stockBalance = userModel.stockTotal;
         final stocks = <StockModel>[];
         final response = await StockApiService.readCollection(user.uid);
         if (response.hasData) {
@@ -46,7 +48,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         } else if (response.hasException) {
           emit(DashboardErrorState(response.getException!));
         }
-        emit(StocksPageLoadedState(stocks));
+        emit(StocksPageLoadedState(stocks, stockBalance));
       } else if (_currentIndex == 1) {
         final stipendBalance = userModel.stipendTotal;
 

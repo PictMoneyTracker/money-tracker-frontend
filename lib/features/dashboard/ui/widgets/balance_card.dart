@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class BalanceCard extends StatelessWidget {
-  int totalBalance;
-  int income;
-  int expenses;
-  BalanceCard({
+  final int totalBalance;
+  final int income;
+  final int expenses;
+  const BalanceCard({
     Key? key,
     required this.totalBalance,
     required this.income,

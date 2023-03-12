@@ -15,14 +15,26 @@ class DashboardLoadingState extends DashboardState {}
 
 class AllowancePageLoadedState extends DashboardState {
   final List<TransactionModel> allowanceTransactions;
+  final int allowanceBalance;
+  final int allowanceSpent;
 
-  AllowancePageLoadedState(this.allowanceTransactions);
+  AllowancePageLoadedState(
+    this.allowanceTransactions,
+    this.allowanceBalance,
+    this.allowanceSpent,
+  );
 }
 
 class StipendPageLoadedState extends DashboardState {
   final List<TransactionModel> stipendTransactions;
+  final int stipendBalance;
+  final int stipendSpent;
 
-  StipendPageLoadedState(this.stipendTransactions);
+  StipendPageLoadedState(
+    this.stipendTransactions,
+    this.stipendBalance,
+    this.stipendSpent,
+  );
 }
 
 class StocksPageLoadedState extends DashboardState {

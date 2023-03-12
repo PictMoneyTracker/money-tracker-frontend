@@ -77,6 +77,7 @@ class TransactionApiService {
           .collection('transactions')
           .where('spendFrom', isEqualTo: spendFrom.name)
           .orderBy('createdAt', descending: true)
+          .limit(100)
           .get();
       for (var i = 0; i < querySnapshot.docs.length; i++) {
         models.add(

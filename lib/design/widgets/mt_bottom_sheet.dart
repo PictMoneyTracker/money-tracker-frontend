@@ -9,9 +9,12 @@ import '../../core/api_service/firebase_crud_service/utils/categories.dart';
 import '../../features/dashboard/bloc/dashboard_bloc.dart';
 
 class MtBottomSheet extends StatefulWidget {
+  final TransactionModel? existingTransaction;
+
   const MtBottomSheet({
     Key? key,
     required this.spentFrom,
+    this.existingTransaction,
   }) : super(key: key);
 
   final SpendFrom spentFrom;
@@ -29,6 +32,20 @@ class _MtBottomSheetState extends State<MtBottomSheet> {
 
   final items = SpendCategory.values.toList();
   var dropdownValue = SpendCategory.food;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    if (widget.existingTransaction != null) {
+      titleController.text = widget.existingTransaction!.title;
+      descriptionController.text = widget.existingTransaction!.description!;
+      amountController.text = widget.existingTransaction!.amount.toString();
+      SpendCategory category = SpendCategory.values.firstWhere(
+          (element) => element.name == widget.existingTransaction!.category);
+      dropdownValue = category;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,27 +158,51 @@ class _MtBottomSheetState extends State<MtBottomSheet> {
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
                           // Todo: Save the data, show alert dialog
-                          final txnModel = TransactionModel(
-                            title: titleController.text,
-                            description: descriptionController.text,
-                            amount: int.parse(amountController.text),
-                            category: dropdownValue.name,
-                            createdAt: DateTime.now().toString(),
-                            id: const Uuid().v4(),
-                            spendFrom: widget.spentFrom.name,
-                          );
-                          TransactionApiService.createDoc(
-                            txnModel,
-                            FirebaseAuth.instance.currentUser!.uid,
-                          );
-                          if (widget.spentFrom == SpendFrom.stipend) {
-                            BlocProvider.of<DashboardBloc>(context)
-                                .add(DashboardIndexChangedEvent(1));
+                          if (widget.existingTransaction != null) {
+                            final txnModel = TransactionModel(
+                              title: titleController.text,
+                              description: descriptionController.text,
+                              amount: int.parse(amountController.text),
+                              category: dropdownValue.name,
+                              createdAt: widget.existingTransaction!.createdAt,
+                              id: widget.existingTransaction!.id,
+                              spendFrom: widget.spentFrom.name,
+                            );
+                            TransactionApiService.updateDoc(
+                              txnModel,
+                              FirebaseAuth.instance.currentUser!.uid,
+                            );
+                            if (widget.spentFrom == SpendFrom.stipend) {
+                              BlocProvider.of<DashboardBloc>(context)
+                                  .add(DashboardIndexChangedEvent(1));
+                            } else {
+                              BlocProvider.of<DashboardBloc>(context)
+                                  .add(DashboardIndexChangedEvent(2));
+                            }
+                            Navigator.of(context).pop();
                           } else {
-                            BlocProvider.of<DashboardBloc>(context)
-                                .add(DashboardIndexChangedEvent(2));
+                            final txnModel = TransactionModel(
+                              title: titleController.text,
+                              description: descriptionController.text,
+                              amount: int.parse(amountController.text),
+                              category: dropdownValue.name,
+                              createdAt: DateTime.now().toString(),
+                              id: const Uuid().v4(),
+                              spendFrom: widget.spentFrom.name,
+                            );
+                            TransactionApiService.createDoc(
+                              txnModel,
+                              FirebaseAuth.instance.currentUser!.uid,
+                            );
+                            if (widget.spentFrom == SpendFrom.stipend) {
+                              BlocProvider.of<DashboardBloc>(context)
+                                  .add(DashboardIndexChangedEvent(1));
+                            } else {
+                              BlocProvider.of<DashboardBloc>(context)
+                                  .add(DashboardIndexChangedEvent(2));
+                            }
+                            Navigator.of(context).pop();
                           }
-                          Navigator.of(context).pop();
                         }
                       },
                       child: const Text(

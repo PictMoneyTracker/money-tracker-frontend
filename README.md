@@ -1,16 +1,16 @@
-# money_tracker
+# Money Tracker
 
-A new Flutter project.
+### Track your money, easily!
 
-## Getting Started
+## Purpose
 
-This project is a starting point for a Flutter application.
+This app is mainly for students to keep track of their finances. This app allows students to input their income and expenses, categorize them, and keep track of their spending.
 
-A few resources to get you started if this is your first Flutter project:
+#
+This app has an intuitive user interface and simple navigation that allows students to input their financial data quickly. The following is a demo video for a better understanding.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+https://user-images.githubusercontent.com/84332986/224568355-dfc722f8-7a56-4d9f-a268-f752fc2e5290.mp4
+#
+Made with ❤️ by Atharv & Purva

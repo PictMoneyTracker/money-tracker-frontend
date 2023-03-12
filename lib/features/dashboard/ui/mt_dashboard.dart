@@ -72,8 +72,12 @@ class _MtDashboardState extends State<MtDashboard> {
       },
       child: BlocBuilder<DashboardBloc, DashboardState>(
         builder: (context, state) {
+          User user = FirebaseAuth.instance.currentUser!;
+
           return Scaffold(
-            drawer: const MtDrawer(),
+            drawer: MtDrawer(
+              user: user,
+            ),
             appBar: AppBar(
               title: const Text('Money Tracker'),
             ),

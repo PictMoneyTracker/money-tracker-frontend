@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -5,37 +6,35 @@ import '../../features/auth/bloc/auth_bloc.dart';
 import '../pages/settings_page.dart';
 
 class MtDrawer extends StatelessWidget {
-  const MtDrawer({super.key});
+  const MtDrawer({super.key, required this.user});
 
+  final User user;
   @override
   Widget build(BuildContext context) {
     return Drawer(
       width: 250,
       child: Column(
         children: <Widget>[
-          const SizedBox(
+          SizedBox(
             height: 250,
             width: 250,
             child: DrawerHeader(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.blue,
               ), //BoxDecoration
               child: UserAccountsDrawerHeader(
-                decoration: BoxDecoration(color: Colors.blue),
+                decoration: const BoxDecoration(color: Colors.blue),
                 accountName: Text(
-                  "John Doe",
-                  style: TextStyle(fontSize: 18),
+                  user.displayName!,
+                  style: const TextStyle(fontSize: 18),
                 ),
-                accountEmail: Text("abc@gmail.com"),
-                currentAccountPictureSize: Size.square(70),
+                accountEmail: Text(user.email!),
+                // currentAccountPictureSize: const Size.square(70),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,
-                  child: Text(
-                    "A",
-                    style: TextStyle(fontSize: 25.0, color: Colors.blue),
-                  ), //Text
-                ), //circleAvatar
-              ), //UserAccountDrawerHeader
+                  child: Image.network(user.photoURL!), //Text
+                ),
+              ),
             ),
           ),
           Card(
@@ -71,8 +70,7 @@ class MtDrawer extends StatelessWidget {
                 onChanged: (value) {},
               ),
               // trailing: Icon(Icons.more_vert),
-              onTap: () {
-              },
+              onTap: () {},
             ),
           ),
           Card(

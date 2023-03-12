@@ -35,7 +35,6 @@ class _MtBottomSheetState extends State<MtBottomSheet> {
 
   @override
   void initState() {
-    // TODO: implement initState
     if (widget.existingTransaction != null) {
       titleController.text = widget.existingTransaction!.title;
       descriptionController.text = widget.existingTransaction!.description!;

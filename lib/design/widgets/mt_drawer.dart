@@ -65,32 +65,30 @@ class MtDrawer extends StatelessWidget {
               },
             ),
           ),
-          Card(
-            child: ListTile(
-              leading: const Icon(Icons.dark_mode, color: Colors.lightGreen),
-              title: const Text('Dark Mode',
-                  style: TextStyle(color: Colors.green, fontSize: 15)),
-              trailing: Switch(
-                value: true,
-                onChanged: (value) {
-                  ThemeData.dark();
-                },
-              ),
-              // trailing: Icon(Icons.more_vert),
-              onTap: () {},
-            ),
-          ),
+          // Card(
+          //   child: ListTile(
+          //     leading: const Icon(Icons.dark_mode, color: Colors.lightGreen),
+          //     title: const Text('Dark Mode',
+          //         style: TextStyle(color: Colors.green, fontSize: 15)),
+          //     trailing: Switch(
+          //       value: true,
+          //       onChanged: (value) {
+          //         ThemeData.dark();
+          //       },
+          //     ),
+          //     // trailing: Icon(Icons.more_vert),
+          //     onTap: () {},
+          //   ),
+          // ),
           Card(
             child: ListTile(
               leading: const Icon(Icons.exit_to_app, color: Colors.lightGreen),
-              title: const Text('Logout',
-                  style: TextStyle(color: Colors.green, fontSize: 15)),
-              // trailing: Icon(Icons.more_vert),
+              title: const Text(
+                'Logout',
+                style: TextStyle(color: Colors.green, fontSize: 15),
+              ),
               onTap: () {
                 BlocProvider.of<AuthBloc>(context).add(AuthLogoutEvent());
-                // Update the state of the app
-                // ...
-                // Then close the drawer
               },
             ),
           ),

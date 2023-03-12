@@ -1,10 +1,10 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:money_tracker/core/functions/general_functions.dart';
-import 'package:money_tracker/features/dashboard/ui/mt_dashboard.dart';
 
+import '../../../core/functions/general_functions.dart';
 import '../../../design/widgets/mt_loader.dart';
+import '../../dashboard/ui/mt_dashboard.dart';
 import '../bloc/auth_bloc.dart';
 
 class AuthPage extends StatelessWidget {

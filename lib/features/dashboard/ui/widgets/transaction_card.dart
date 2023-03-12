@@ -19,13 +19,17 @@ class TransactionCard extends StatelessWidget {
     }
 
     return Container(
-      margin: const EdgeInsets.all(10.0),
+      margin: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(1.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             transaction.title,
-            style: const TextStyle(fontSize: 20.0),
+            style: const TextStyle(
+                fontSize: 20.0,
+                color: Colors.green,
+                fontWeight: FontWeight.w500),
             textAlign: TextAlign.left,
           ),
           Row(
@@ -39,23 +43,23 @@ class TransactionCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   softWrap: false,
                   style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 15.0,
-                  ),
+                      color: Colors.grey,
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w400),
                 ),
               ),
               const Expanded(child: SizedBox()),
               const Icon(
                 Icons.currency_rupee,
-                color: Colors.grey,
+                color: Colors.green,
                 size: 20.0,
               ),
               Text(
                 transaction.amount.toString(),
                 style: const TextStyle(
-                  color: Colors.green,
-                  fontSize: 15.0,
-                ),
+                    color: Colors.green,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.w500),
               ),
             ],
           ),
@@ -64,7 +68,10 @@ class TransactionCard extends StatelessWidget {
             children: [
               Text(
                 transaction.category,
-                style: const TextStyle(fontSize: 15.0),
+                style: const TextStyle(
+                    fontSize: 17.0,
+                    color: Colors.green,
+                    fontWeight: FontWeight.w500),
                 textAlign: TextAlign.left,
               ),
               Text(
@@ -72,6 +79,10 @@ class TransactionCard extends StatelessWidget {
                   transaction.createdAt!,
                   'dd/MM/yy',
                 ),
+                style: const TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w500),
               ),
             ],
           ),

@@ -22,7 +22,7 @@ class StipendPage extends StatelessWidget {
                 income: state.stipendBalance,
                 expenses: state.stipendSpent,
               );
-            } 
+            }
             return const Center(
               child: MtLoader(),
             );
@@ -38,6 +38,8 @@ class StipendPage extends StatelessWidget {
             textAlign: TextAlign.left,
             style: TextStyle(
               fontSize: 20,
+              fontWeight: FontWeight.w500,
+              color: Colors.green,
             ),
           ),
         ),

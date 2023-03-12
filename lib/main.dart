@@ -40,6 +40,15 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+          brightness: Brightness.light,
+        ),
+        darkTheme: ThemeData(
+          primarySwatch: Colors.green,
+          brightness: Brightness.dark,
+        ),
+        themeMode: ThemeMode.system,
         title: _title,
         home: user != null ? const MtDashboard() : const AuthPage(),
         debugShowCheckedModeBanner: false,

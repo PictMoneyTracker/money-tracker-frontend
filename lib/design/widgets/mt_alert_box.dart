@@ -22,14 +22,16 @@ class MtAlertBox extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel'),
+          child: const Text('Cancel',
+              style: TextStyle(color: Color.fromRGBO(10, 173, 18, 0.698))),
         ),
         TextButton(
           onPressed: () {
             onPressed();
             Navigator.of(context).pop();
           },
-          child: const Text('OK'),
+          child: const Text('OK',
+              style: TextStyle(color: Color.fromRGBO(10, 173, 18, 0.698))),
         ),
       ],
     );

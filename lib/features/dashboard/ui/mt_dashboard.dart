@@ -103,6 +103,7 @@ class _MtDashboardState extends State<MtDashboard> {
             ),
             bottomNavigationBar: const MtBottomNavbar(),
             floatingActionButton: FloatingActionButton(
+              backgroundColor: Colors.green,
               onPressed: () {
                 if (state is StocksPageLoadedState) {
                   showSearch(

@@ -39,9 +39,9 @@ class AuthPage extends StatelessWidget {
                       textAlign: TextAlign.center,
                       speed: const Duration(milliseconds: 150),
                       textStyle: const TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
+                          fontSize: 30,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey),
                     ),
                   ],
                   isRepeatingAnimation: true,

@@ -39,8 +39,12 @@ class StipendPageLoadedState extends DashboardState {
 
 class StocksPageLoadedState extends DashboardState {
   final List<StockModel> stocks;
+  final int stockBalance;
 
-  StocksPageLoadedState(this.stocks);
+  StocksPageLoadedState(
+    this.stocks,
+    this.stockBalance,
+  );
 }
 
 class DashboardErrorState extends DashboardState {

@@ -7,9 +7,9 @@ class MtLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
+      children: [
         Text('Track your money, easily!',
             style: TextStyle(
                 fontSize: 15, fontWeight: FontWeight.w500, color: Colors.grey)),

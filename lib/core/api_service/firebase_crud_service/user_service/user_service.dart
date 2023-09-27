@@ -3,30 +3,38 @@
 // then class name - ProfileApiService
 
 // server - firebase
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
+
+import '../../../../main.dart';
 import '../../../api_layer/api_response.dart';
 import 'models/user_model.dart';
-
-
 
 class UserApiService {
   // create apis
   static Future<ApiResponse<bool>> createDoc(UserModel user) async {
     try {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.id)
-          .set({
-        // model.toMap()
-        'id': user.id,
+      final res = await dio
+          .postUri(Uri.parse('https://money-trackey.onrender.com/user'), data: {
         'name': user.name,
         'email': user.email,
         'photoUrl': user.photoUrl,
-        'stockTotal': user.stockTotal,
-        'allowanceTotal': user.allowanceTotal,
         'stipendTotal': user.stipendTotal,
+        'allowanceTotal': user.allowanceTotal,
+        'stockTotal': user.stockTotal,
       });
+
+      final token = res.headers.value('Authorization');
+      final id = res.data['data']['id'];
+
+
+      sharedPref.setString('token', token ?? '');
+      sharedPref.setString('id', id ?? '');
+
+      log(res.data.toString());
+
       return const ApiResponse(data: true);
     } catch (e) {
       return ApiResponse(error: e.toString());
@@ -37,7 +45,6 @@ class UserApiService {
     try {
       await FirebaseFirestore.instance.collection('users').add({
         // model.toMap()
-
       });
       return const ApiResponse(data: true);
     } catch (e) {
@@ -48,13 +55,14 @@ class UserApiService {
   // read apis
   static Future<ApiResponse<UserModel>> readDoc(String uid) async {
     try {
-      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .get();
+      final token = sharedPref.getString('token');
 
-      UserModel user =
-          UserModel.fromMap(documentSnapshot.data() as Map<String, dynamic>);
+      final res = await dio.getUri(
+        Uri.parse('https://money-trackey.onrender.com/user/$uid'),
+        options: Options(headers: {'Authorization': 'Bearer ${token ?? ''}'}),
+      );
+
+      UserModel user = UserModel.fromMap(res.data['data']['user'] as Map<String, dynamic>);
       return ApiResponse(data: user);
     } catch (e) {
       return ApiResponse(error: e.toString());
@@ -94,10 +102,7 @@ class UserApiService {
   // delete apis
   static Future<ApiResponse<bool>> deleteDoc(String uid) async {
     try {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .delete();
+      await FirebaseFirestore.instance.collection('users').doc(uid).delete();
 
       return const ApiResponse(data: true);
     } catch (e) {

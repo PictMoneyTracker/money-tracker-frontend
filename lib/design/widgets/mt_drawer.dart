@@ -1,14 +1,38 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:money_tracker/core/api_service/firebase_crud_service/user_service/models/user_model.dart';
 
+import '../../core/api_service/firebase_crud_service/user_service/user_service.dart';
 import '../../features/auth/bloc/auth_bloc.dart';
 import '../pages/settings_page.dart';
 
-class MtDrawer extends StatelessWidget {
-  const MtDrawer({super.key, required this.user});
+class MtDrawer extends StatefulWidget {
+  const MtDrawer({super.key, required this.id});
 
-  final User user;
+  final String id;
+
+  @override
+  State<MtDrawer> createState() => _MtDrawerState();
+}
+
+class _MtDrawerState extends State<MtDrawer> {
+  late UserModel user;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    UserApiService.readDoc(widget.id).then((value) {
+      if (value.hasException) {
+        print(value.getException!);
+      }
+      final currentUser = value.getData;
+      setState(() {
+        user = currentUser!;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -24,15 +48,15 @@ class MtDrawer extends StatelessWidget {
               child: UserAccountsDrawerHeader(
                 decoration: const BoxDecoration(color: Colors.green),
                 accountName: Text(
-                  user.displayName!,
+                  user.name,
                   style: const TextStyle(fontSize: 18),
                 ),
-                accountEmail: Text(user.email!),
+                accountEmail: Text(user.email),
                 // currentAccountPictureSize: const Size.square(70),
                 currentAccountPicture: Center(
                   child: CircleAvatar(
                     radius: 60,
-                    backgroundImage: NetworkImage(user.photoURL!),
+                    backgroundImage: NetworkImage(user.photoUrl!),
                     // child: Image.network(user.photoURL!), //Text
                   ),
                 ),

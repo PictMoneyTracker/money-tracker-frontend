@@ -15,7 +15,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthRequestEvent>((event, emit) async {
       emit(AuthLoadingState());
       try {
-        final isNew = await googleAuth.signInWithGoogle();
+        await googleAuth.signInWithGoogle();
         FirebaseAuth auth = FirebaseAuth.instance;
         final user = auth.currentUser;
         final userModel = UserModel(
@@ -27,9 +27,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           allowanceTotal: 0,
           stockTotal: 0,
         );
-        if (isNew.getData!) {
-          await UserApiService.createDoc(userModel);
-        }
+
+        await UserApiService.createDoc(userModel);
       } catch (e) {
         emit(AuthFailureState(e.toString()));
       }

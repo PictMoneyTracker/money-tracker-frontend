@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:money_tracker/main.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/api_service/firebase_crud_service/transaction_service/models/transaction_model.dart';
@@ -48,6 +48,7 @@ class _MtBottomSheetState extends State<MtBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final id = sharedPref.getString('id');
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (context, state) {
         return Container(
@@ -176,7 +177,7 @@ class _MtBottomSheetState extends State<MtBottomSheet> {
                             );
                             TransactionApiService.updateDoc(
                               txnModel,
-                              FirebaseAuth.instance.currentUser!.uid,
+                              id!,
                             );
                             if (widget.spentFrom == SpendFrom.stipend) {
                               BlocProvider.of<DashboardBloc>(context)
@@ -198,7 +199,7 @@ class _MtBottomSheetState extends State<MtBottomSheet> {
                             );
                             TransactionApiService.createDoc(
                               txnModel,
-                              FirebaseAuth.instance.currentUser!.uid,
+                              id!,
                             );
                             if (widget.spentFrom == SpendFrom.stipend) {
                               BlocProvider.of<DashboardBloc>(context)

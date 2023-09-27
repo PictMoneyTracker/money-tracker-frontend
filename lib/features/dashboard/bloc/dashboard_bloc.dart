@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
 import '../../../core/api_service/firebase_crud_service/user_service/models/user_model.dart';
@@ -9,6 +8,7 @@ import '../../../core/api_service/firebase_crud_service/stock_service/stock_serv
 import '../../../core/api_service/firebase_crud_service/transaction_service/models/transaction_model.dart';
 import '../../../core/api_service/firebase_crud_service/transaction_service/transaction_service.dart';
 import '../../../core/api_service/firebase_crud_service/utils/categories.dart';
+import '../../../main.dart';
 
 part 'dashboard_event.dart';
 part 'dashboard_state.dart';
@@ -19,11 +19,11 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   int get currentIndex => _currentIndex;
 
   DashboardBloc() : super(DashboardInitialState()) {
-    User? user = FirebaseAuth.instance.currentUser;
+    final id = sharedPref.getString('id');
     late UserModel userModel;
     on<DashboardInitialEvent>((event, emit) async {
       emit(DashboardLoadingState());
-      final userModelResponse = await UserApiService.readDoc(user!.uid);
+      final userModelResponse = await UserApiService.readDoc(id!);
 
       userModel = userModelResponse.getData!;
       emit(DashboardIndexChangedState(_currentIndex));
@@ -31,7 +31,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
     on<DashboardIndexChangedEvent>((event, emit) async {
       emit(DashboardLoadingState());
-      final userModelResponse = await UserApiService.readDoc(user!.uid);
+      final userModelResponse = await UserApiService.readDoc(id!);
       if (userModelResponse.hasData) {
         userModel = userModelResponse.getData!;
       } else if (userModelResponse.hasException) {
@@ -42,7 +42,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       if (_currentIndex == 0) {
         final stockBalance = userModel.stockTotal;
         final stocks = <StockModel>[];
-        final response = await StockApiService.readCollection(user.uid);
+        final response = await StockApiService.readCollection(id);
         if (response.hasData) {
           stocks.addAll(response.getData!);
         } else if (response.hasException) {
@@ -55,7 +55,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         int stipendSpent = 0;
         final transactions = <TransactionModel>[];
         final response = await TransactionApiService.readCollection(
-            user.uid, SpendFrom.stipend);
+            id, SpendFrom.stipend);
 
         if (response.hasData) {
           transactions.addAll(response.getData!);
@@ -78,7 +78,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         int allowanceSpent = 0;
         final transactions = <TransactionModel>[];
         final response = await TransactionApiService.readCollection(
-            user.uid, SpendFrom.allowance);
+            id, SpendFrom.allowance);
 
         if (response.hasData) {
           transactions.addAll(response.getData!);

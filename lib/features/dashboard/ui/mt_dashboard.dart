@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:money_tracker/core/api_service/firebase_crud_service/stock_service/stock_service.dart';
+import '../../../core/api_service/firebase_crud_service/stock_service/stock_service.dart';
+
 
 import '../../../core/api_service/firebase_crud_service/transaction_service/models/transaction_model.dart';
 import '../../../core/api_service/firebase_crud_service/transaction_service/transaction_service.dart';
@@ -15,6 +15,7 @@ import '../../../design/widgets/mt_bottom_navbar.dart';
 import '../../../design/widgets/mt_bottom_sheet.dart';
 import '../../../design/widgets/mt_drawer.dart';
 import '../../../design/widgets/mt_loader.dart';
+import '../../../main.dart';
 import '../../auth/bloc/auth_bloc.dart';
 import '../../auth/ui/login.dart';
 import '../../stocks/stock_search_delegate.dart';
@@ -73,11 +74,11 @@ class _MtDashboardState extends State<MtDashboard> {
       },
       child: BlocBuilder<DashboardBloc, DashboardState>(
         builder: (context, state) {
-          User user = FirebaseAuth.instance.currentUser!;
-
+          // User user = FirebaseAuth.instance.currentUser!;
+          final id = sharedPref.getString('id');
           return Scaffold(
             drawer: MtDrawer(
-              user: user,
+              id: id!,
             ),
             appBar: AppBar(
               title: const Text('Money Tracker'),
@@ -164,6 +165,8 @@ class TransactionHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final id = sharedPref.getString('id');
+
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (context, state) {
         if (state is DashboardLoadingState) {
@@ -188,7 +191,7 @@ class TransactionHistory extends StatelessWidget {
                         title: "Delete Stock",
                         onPressed: () {
                           StockApiService.deleteDoc(
-                            FirebaseAuth.instance.currentUser!.uid,
+                            id!,
                             state.stocks[index].id,
                           );
                           BlocProvider.of<DashboardBloc>(context).add(
@@ -237,7 +240,7 @@ class TransactionHistory extends StatelessWidget {
                         title: "Delete Transaction",
                         onPressed: () {
                           TransactionApiService.deleteDoc(
-                            FirebaseAuth.instance.currentUser!.uid,
+                            id!,
                             state.stipendTransactions[index].id,
                           );
                           BlocProvider.of<DashboardBloc>(context).add(
@@ -300,7 +303,7 @@ class TransactionHistory extends StatelessWidget {
                         title: "Delete Transaction",
                         onPressed: () {
                           TransactionApiService.deleteDoc(
-                            FirebaseAuth.instance.currentUser!.uid,
+                            id!,
                             state.allowanceTransactions[index].id,
                           );
                           BlocProvider.of<DashboardBloc>(context).add(

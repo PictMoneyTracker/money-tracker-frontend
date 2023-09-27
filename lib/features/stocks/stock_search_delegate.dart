@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/api_service/firebase_crud_service/stock_service/models/stock_model.dart';
 import '../../core/api_service/firebase_crud_service/stock_service/stock_service.dart';
 import '../../design/widgets/mt_loader.dart';
+import '../../main.dart';
 import '../dashboard/bloc/dashboard_bloc.dart';
 
 Future<String> loadStockAsset() async {
@@ -92,16 +92,16 @@ class StockSearchDelegate extends SearchDelegate<String> {
                   ),
                   onTap: () {
                     // TODO: Change auth api call
-                    User? user = FirebaseAuth.instance.currentUser;
+                    final id = sharedPref.getString('id');
                     final StockModel stock = snapshot.data![index];
-                    StockApiService.createDoc(stock, user!.uid);
+                    StockApiService.createDoc(stock, id!);
                     BlocProvider.of<DashboardBloc>(context)
                         .add(DashboardIndexChangedEvent(0));
                     close(context, '');
                   },
                 );
               } else {
-                return Column();
+                return const Column();
               }
             },
             itemCount: snapshot.data!.length,

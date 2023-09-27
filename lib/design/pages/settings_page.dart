@@ -1,10 +1,10 @@
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/api_service/firebase_crud_service/user_service/models/user_model.dart';
 import '../../core/api_service/firebase_crud_service/user_service/user_service.dart';
+import '../../main.dart';
 import '../widgets/mt_alert_box.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -15,21 +15,27 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  User? user = FirebaseAuth.instance.currentUser;
+  final id = sharedPref.getString('id');
   static final formKey1 = GlobalKey<FormState>();
 
   final TextEditingController stipendController = TextEditingController();
   final TextEditingController allowanceController = TextEditingController();
   final TextEditingController stocksController = TextEditingController();
+  late final String email;
+  late final String name;
+  late final String? imageUrl;
 
   @override
   void initState() {
-    UserApiService.readDoc(user!.uid).then((value) {
+    UserApiService.readDoc(id!).then((value) {
       if (value.hasException) {
         log(value.getException!);
       }
       final currentUser = value.getData;
-      stipendController.text = currentUser!.stipendTotal.toString();
+      email = currentUser!.email;
+      name = currentUser.name;
+      imageUrl = currentUser.photoUrl;
+      stipendController.text = currentUser.stipendTotal.toString();
       allowanceController.text = currentUser.allowanceTotal.toString();
       stocksController.text = currentUser.stockTotal.toString();
     });
@@ -143,10 +149,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     if (formKey1.currentState!.validate()) {
                       // Todo: Save the data, show alert dialog
                       UserModel updatedUser = UserModel(
-                        id: user!.uid,
-                        email: user!.email!,
-                        name: user!.displayName!,
-                        photoUrl: user!.photoURL,
+                        id: id!,
+                        email: email,
+                        name: name,
+                        photoUrl: imageUrl,
                         stipendTotal: int.parse(stipendController.text),
                         allowanceTotal: int.parse(allowanceController.text),
                         stockTotal: int.parse(stocksController.text),
